@@ -7,11 +7,13 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const Stack = createStackNavigator();
 
 const Navigation = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(
     () =>
@@ -30,6 +32,9 @@ const Navigation = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {currentUser ? (
           <>
+            {!currentUser.displayName && (
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+            )}
             <Stack.Screen name="Home" component={HomeScreen} />
           </>
         ) : (

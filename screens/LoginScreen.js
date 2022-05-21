@@ -73,7 +73,7 @@ const LoginScreen = ({ navigation }) => {
             fontSize: 18,
           }}
         />
-        <TouchableOpacity disabled={false}>
+        <TouchableOpacity>
           <Text
             style={tw`text-white bg-green-800 w-80 text-center p-2 rounded-sm font-bold mt-6`}
           >
