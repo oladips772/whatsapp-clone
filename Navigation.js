@@ -14,16 +14,15 @@ const Navigation = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(
-    () => () => {
+    () =>
       onAuthStateChanged(auth, (user) => {
         if (user) {
           setCurrentUser(user);
         } else {
           setCurrentUser(null);
         }
-      });
-    },
-    []
+      }),
+    [currentUser]
   );
 
   return (

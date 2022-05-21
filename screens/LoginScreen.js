@@ -6,14 +6,24 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Button,
   StatusBar,
 } from "react-native";
-import React, { useContext } from "react";
+import { useState } from "react";
 import tw from "twrnc";
 import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ToastAndroid } from "react-native-web";
 
 const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const SIGNUP = async () => {
+    await createUserWithEmailAndPassword(auth, (email, password)).catch((err) =>
+      ToastAndroid(err)
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#000" }}>
       <StatusBar barStyle="white" />
@@ -35,6 +45,8 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           placeholderTextColor="gray"
           placeholder="Email"
+          value={email}
+          onChangeText={(val) => setEmail(val)}
           style={{
             borderBottomColor: "green",
             borderBottomWidth: 1,
@@ -49,6 +61,8 @@ const LoginScreen = ({ navigation }) => {
           placeholderTextColor="gray"
           secureTextEntry={true}
           placeholder="Password"
+          value={password}
+          onChangeText={(val) => setPassword(val)}
           style={{
             borderBottomColor: "green",
             borderBottomWidth: 1,

@@ -1,4 +1,6 @@
 /** @format */
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   StyleSheet,
   Text,
@@ -7,11 +9,22 @@ import {
   Image,
   TextInput,
   StatusBar,
+  ToastAndroid,
+  Alert,
 } from "react-native";
 import tw from "twrnc";
 import { auth } from "../firebase";
 
 const RegisterScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const SIGNUP = async () => {
+    await createUserWithEmailAndPassword(auth, email, password).catch((err) =>
+      alert(err)
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#000" }}>
       <StatusBar barStyle="white" />
@@ -33,6 +46,8 @@ const RegisterScreen = ({ navigation }) => {
         <TextInput
           placeholderTextColor="gray"
           placeholder="Email"
+          value={email}
+          onChangeText={(val) => setEmail(val)}
           style={{
             borderBottomColor: "green",
             borderBottomWidth: 1,
@@ -47,6 +62,8 @@ const RegisterScreen = ({ navigation }) => {
           placeholderTextColor="gray"
           secureTextEntry={true}
           placeholder="Password"
+          value={password}
+          onChangeText={(val) => setPassword(val)}
           style={{
             borderBottomColor: "green",
             borderBottomWidth: 1,
@@ -57,7 +74,7 @@ const RegisterScreen = ({ navigation }) => {
             fontSize: 18,
           }}
         />
-        <TouchableOpacity disabled={false}>
+        <TouchableOpacity onPress={SIGNUP}>
           <Text
             style={tw`text-white bg-green-800 w-80 text-center p-2 rounded-sm font-bold mt-6`}
           >
