@@ -11,16 +11,15 @@ import {
 import { useState } from "react";
 import tw from "twrnc";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { ToastAndroid } from "react-native-web";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const SIGNUP = async () => {
-    await createUserWithEmailAndPassword(auth, (email, password)).catch((err) =>
-      ToastAndroid(err)
+  const LOGIN = async () => {
+    await signInWithEmailAndPassword(auth, (email, password)).catch((err) =>
+      alert(err)
     );
   };
 
@@ -28,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: "#000" }}>
       <StatusBar barStyle="white" />
       <View style={styles.container}>
-        <Text style={tw`text-green-600 text-2xl font-bold mb-6`}>
+        <Text style={tw`text-green-500 text-2xl font-bold mb-6`}>
           Welcome to Whatsapp
         </Text>
         <Image
@@ -48,7 +47,7 @@ const LoginScreen = ({ navigation }) => {
           value={email}
           onChangeText={(val) => setEmail(val)}
           style={{
-            borderBottomColor: "green",
+            borderBottomColor: "lightgreen",
             borderBottomWidth: 1,
             width: "87%",
             color: "lightgray",
@@ -64,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
           value={password}
           onChangeText={(val) => setPassword(val)}
           style={{
-            borderBottomColor: "green",
+            borderBottomColor: "lightgreen",
             borderBottomWidth: 1,
             width: "87%",
             color: "lightgray",
@@ -73,9 +72,9 @@ const LoginScreen = ({ navigation }) => {
             fontSize: 18,
           }}
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={LOGIN}>
           <Text
-            style={tw`text-white bg-green-800 w-80 text-center p-2 rounded-sm font-bold mt-6`}
+            style={tw`text-white bg-green-600 w-80 text-center p-2 rounded-sm font-bold mt-6`}
           >
             LOGIN
           </Text>

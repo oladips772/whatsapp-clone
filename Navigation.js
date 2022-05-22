@@ -8,6 +8,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ProfileScreen from "./screens/ProfileScreen";
+import SplashScreen from "./screens/SplashScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,7 @@ const Navigation = () => {
           </>
         ) : (
           <>
+            <Stack.Screen name="Splash" component={SplashScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </>

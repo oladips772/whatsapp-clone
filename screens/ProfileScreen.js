@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  StatusBar,
 } from "react-native";
 import { useState } from "react";
 import tw from "twrnc";
@@ -27,13 +28,16 @@ const ProfileScreen = () => {
     }
   };
 
+  const updateUser = () => {};
+
   return (
     <View style={styles.container}>
+      <StatusBar color="white" />
       <View style={{ marginTop: -100 }}>
         <Text style={tw`text-green-400 mb-2 text-2xl text-center`}>
           Profile Info
         </Text>
-        <Text style={tw`text-green-400`}>
+        <Text style={tw`text-green-400 mb-2`}>
           Please provide your name and optional profile photo
         </Text>
       </View>
@@ -67,9 +71,10 @@ const ProfileScreen = () => {
           marginBottom: 15,
           padding: 5,
           fontSize: 18,
+          marginTop: 10,
         }}
       />
-      <TouchableOpacity>
+      <TouchableOpacity disabled={!displayName}>
         <Text
           style={tw`text-white bg-green-600 w-80 text-center p-2 rounded-sm font-bold mt-6`}
         >
