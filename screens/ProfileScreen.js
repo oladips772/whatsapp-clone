@@ -12,8 +12,18 @@ import { useState } from "react";
 import tw from "twrnc";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { auth, db, storage } from "../firebase";
+import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
+import {
+  getDownloadURL,
+  uploadString,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ window }) => {
+  const user = auth.currentUser;
   const [image, setImage] = useState("");
   const [displayName, setDisplayName] = useState("");
 
@@ -25,10 +35,44 @@ const ProfileScreen = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      console.log(image);
     }
+    console.log(image);
   };
 
-  const updateUser = () => {};
+  const createProfile = async () => {
+    if (!image) return;
+    const userRef = await addDoc(collection(db, "users"), {
+      displayName: displayName,
+      email: user.email,
+    });
+
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", image, true);
+      xhr.send(null);
+    });
+
+    const imageRef = ref(storage, `users/${userRef.id}/images`);
+    await uploadBytes(imageRef, blob, {
+      contentType: "image/jpeg",
+    });
+    await updateDoc(userRef, {
+      profileImage: await getDownloadURL(imageRef),
+    });
+    await updateProfile(user, {
+      displayName: displayName,
+      photoURL: await getDownloadURL(imageRef),
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +118,7 @@ const ProfileScreen = () => {
           marginTop: 10,
         }}
       />
-      <TouchableOpacity disabled={!displayName}>
+      <TouchableOpacity disabled={!displayName} onPress={createProfile}>
         <Text
           style={tw`text-white bg-green-600 w-80 text-center p-2 rounded-sm font-bold mt-6`}
         >

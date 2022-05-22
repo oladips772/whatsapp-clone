@@ -14,7 +14,6 @@ const Stack = createStackNavigator();
 
 const Navigation = () => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(
     () =>
@@ -25,7 +24,7 @@ const Navigation = () => {
           setCurrentUser(null);
         }
       }),
-    [currentUser]
+    [currentUser, auth]
   );
 
   return (
