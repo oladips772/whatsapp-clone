@@ -9,12 +9,22 @@ import { db, auth } from "../firebase";
 const ChatHomeScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
   const currentUser = auth.currentUser;
+  const chatRef = collection(db, "rooms");
+  const chatQuery = query(
+    chatRef,
+    where("participantsArray", "array-contains", currentUser.email)
+  );
 
-  useEffect(() => () => {}, []);
+  useEffect(
+    () => () => {
+      onSnapshot(chatQuery, (snapshot) => {});
+    },
+    []
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={tw`text-lg p-4 text-white`}>ChatHomeScreen</Text>
+      <Text style={tw`text-lg p-4 text-gray-400`}>ChatHomeScreen</Text>
       <TouchableOpacity
         style={styles.floatBtn}
         onPress={() => navigation.navigate("Contacts")}
@@ -42,7 +52,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
     padding: 14,
-    backgroundColor: "green",
+    backgroundColor: "darkgreen",
     borderRadius: 120,
     zIndex: 999,
   },

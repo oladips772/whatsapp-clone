@@ -39,8 +39,6 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "black",
     paddingTop: 15,
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
     paddingBottom: 5,
   },
 });
