@@ -1,11 +1,31 @@
 /** @format */
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import tw from "twrnc";
+import { query, onSnapshot, collection, where, doc } from "firebase/firestore";
+import { db, auth } from "../firebase";
 
-const ChatHomeScreen = () => {
+const ChatHomeScreen = ({ navigation }) => {
+  const [rooms, setRooms] = useState([]);
+  const currentUser = auth.currentUser;
+
+  useEffect(() => () => {}, []);
+
   return (
     <View style={styles.container}>
-      <Text>ChatHomeScreen</Text>
+      <Text style={tw`text-lg p-4 text-white`}>ChatHomeScreen</Text>
+      <TouchableOpacity
+        style={styles.floatBtn}
+        onPress={() => navigation.navigate("Contacts")}
+      >
+        <MaterialCommunityIcons
+          style={{ transform: [{ scale: -1 }, { rotateX: "180deg" }] }}
+          name="android-messages"
+          size={25}
+          color="lightgray"
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -16,5 +36,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000",
+  },
+  floatBtn: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    padding: 14,
+    backgroundColor: "green",
+    borderRadius: 120,
+    zIndex: 999,
   },
 });
