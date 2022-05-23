@@ -8,24 +8,25 @@ import {
   TextInput,
   StatusBar,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import tw from "twrnc";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { auth, db, storage } from "../firebase";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import {
-  getDownloadURL,
-  uploadString,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-const ProfileScreen = ({ window }) => {
+const ProfileScreen = ({ navigation }) => {
   const user = auth.currentUser;
   const [image, setImage] = useState("");
   const [displayName, setDisplayName] = useState("");
+
+  useEffect(() => {
+    if (user.displayName) {
+      navigation.navigate("Home");
+    }
+  }, [user, auth]);
 
   const pickImageHandler = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -35,9 +36,7 @@ const ProfileScreen = ({ window }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      console.log(image);
     }
-    console.log(image);
   };
 
   const createProfile = async () => {
@@ -72,6 +71,7 @@ const ProfileScreen = ({ window }) => {
       displayName: displayName,
       photoURL: await getDownloadURL(imageRef),
     });
+    navigation.navigate("Home");
   };
 
   return (
